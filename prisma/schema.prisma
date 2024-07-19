@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Comments {
+  id                String   @id @default(cuid()) @unique
+  id_comment        String  
+  post_id           String 
+  name              String 
+  email             String?
+  body              String?
+} 
+
