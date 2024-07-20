@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CommentsProviderProps } from "../../@types/dto";
 
-//контексты
+
 const ViewModeContext = createContext<string>("table");
 const SetViewModeContext = createContext<React.Dispatch<React.SetStateAction<string>>>(() => {});
 const FilterContext = createContext<string>("");
@@ -47,7 +47,7 @@ export const CommentsProvider = ({ children }: CommentsProviderProps) => {
   );
 };
 
-//хуки
+
 // export const useComments = () => useContext(CommentsContext);
 // export const useSetComments = () => useContext(SetCommentsContext);
 // export const useTotal = () => useContext(TotalContext);

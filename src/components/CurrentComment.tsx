@@ -31,7 +31,7 @@ export function CurrentComment() {
       await navigator.clipboard.writeText(window.location.href);
       alert("Ссылка скопирована");
     } catch (err) {
-      console.error("Failed to copy link: ", err);
+      console.error("Ошибка при копировании ссылки ", err);
     }
   };
  
