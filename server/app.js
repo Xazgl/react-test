@@ -17,7 +17,7 @@ app.use(cors()); // Включаем CORS
 const port = process.env.PORTDB || 5000;
 
 app.get('/', (req, res) => {
-  res.send('API is running');
+  res.send('Тест');
 });
 
 
@@ -47,6 +47,7 @@ app.get('/comments', async (req, res) => {
 app.get('/commentsAll', async (req, res) => {
   try {
     const { page = 1, limit = 10, filter = '' } = req.query;
+    
     const comments = await db.comments.findMany({
       skip: (page - 1) * limit,
       take: +limit,

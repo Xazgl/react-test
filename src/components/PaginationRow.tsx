@@ -1,8 +1,19 @@
 import { Pagination, PaginationItem } from "@mui/material";
-import { useCommentsContext } from "./Provider";
+import { useFilter, usePage, useSetSearchParams} from "./Provider";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export function PaginationRow() {
-  const { total, handlePageChange, page } = useCommentsContext();
+  const { total } = useSelector((state: RootState) => state.comments)
+  const setSearchParams = useSetSearchParams()
+  const page = usePage()
+  const filter = useFilter()
+
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setSearchParams({ filter, page: value.toString() });
+  };
+
 
   return (
     <div className="flex w-full  justify-center p-1">

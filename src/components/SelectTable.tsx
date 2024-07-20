@@ -1,22 +1,34 @@
-import {
-  Button,
-  ButtonGroup,
-  InputAdornment,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material";
+import {InputAdornment,Switch,TextField, Typography } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import CodeIcon from "@mui/icons-material/Code";
 import SearchIcon from "@mui/icons-material/Search";
-import { useCommentsContext } from "./Provider";
+import { useState } from "react";
+import { useFilter, useSetSearchParams, useSetViewMode, useViewMode } from "./Provider";
 
 export function SelectTable() {
-  const { setViewMode, handleSearch, viewMode, filter, error } =
-    useCommentsContext();
+
+  const [error, setError] = useState('');;
+  const  setViewMode = useSetViewMode()
+  const viewMode =  useViewMode()
+  const setSearchParams = useSetSearchParams()
+  const filter = useFilter()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setViewMode(event.target.checked ? "json" : "table");
+  };
+
+  const validateInput = (value: string) => {
+    const regex = /^[a-zA-Z0-9]*$/; // Допустимые символы (буквы и цифры)
+    if (!regex.test(value)) {
+      setError('Недопустимые символы');
+    } else {
+      setError('');
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    validateInput(e.target.value);
+    setSearchParams({ filter: e.target.value, page: "1" });
   };
 
   const ButtonStyles = `rounded-t-lg font-bold py-2 px-4 transition duration-200 ease-in-out border-2 border-b-0`;

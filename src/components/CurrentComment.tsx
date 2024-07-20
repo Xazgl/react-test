@@ -1,20 +1,22 @@
 import axios from "axios";
-import { Typography, CardContent, Card, Button, CardHeader, IconButton, Avatar } from "@mui/material";
-import { useParams } from "react-router";
-import { useCommentsContext } from "./Provider";
+import { Typography, CardContent, Card, Button, CardHeader, IconButton} from "@mui/material";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import ShareIcon from '@mui/icons-material/Share';
+import { host } from "../config";
+
+
 
 export function CurrentComment() {
   const { id } = useParams<{ id: string }>();
   const [comment, setComment] = useState<any>(null);
+  const navigate = useNavigate();
 
-  const { navigate } = useCommentsContext();
 
   useEffect(() => {
     const fetchComment = async () => {
-      const response = await axios.get(`http://localhost:5000/comments/${id}`);
+      const response = await axios.get(`${host}/comments/${id}`);
       setComment(response.data);
     };
 
@@ -23,17 +25,11 @@ export function CurrentComment() {
 
   if (!comment) return <div>Loading...</div>;
 
-  const handleBackClick = () => {
-    navigate({
-      pathname: "/",
-      search: `?${URLSearchParams.toString()}`,
-    });
-  };
 
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      alert("Ссылка скопирована");
     } catch (err) {
       console.error("Failed to copy link: ", err);
     }
@@ -41,7 +37,7 @@ export function CurrentComment() {
  
   return (
 
-    <section className="flex flex-col justify-center items-center  w-full h-[100vh] p-5 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90">
+    <section className="flex flex-col justify-center items-center  w-full h-[100vh] p-5 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-indigo-500 to-90">
       <div className="flex flex-col w-full mt-[5px] items-start">
       <Card sx={{ maxWidth: 600, margin: 'auto', mt: 5 ,  backgroundColor: "rgba(255, 255, 255, 0.3)"}}>
       <CardHeader
@@ -77,7 +73,7 @@ export function CurrentComment() {
               backgroundColor: '#54529F',
             },
           }}
-          onClick={handleBackClick}
+          onClick={()=>navigate(-1)}
           startIcon={<ReplyAllIcon sx={{ fontSize: '15px' }} />}
         >
           Назад

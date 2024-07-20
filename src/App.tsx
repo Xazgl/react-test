@@ -4,6 +4,8 @@ import { CurrentComment } from "./components/CurrentComment";
 import { CommentsProvider } from "./components/Provider";
 import { useEffect } from "react";
 import axios from "axios";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 const App = () => {
   useEffect(() => {
@@ -20,14 +22,16 @@ const App = () => {
 
   return (
     <Router>
-      <CommentsProvider>
-      <section className="flex flex-col w-full min-h-screen bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% p-5">
+      <Provider store={store}>
+       <CommentsProvider>
+        <section className="flex flex-col w-full min-h-screen bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-indigo-500  to-90% p-5">
           <Routes>
             <Route path="/" element={<CommentsTable />} />
             <Route path="/comment/:id" element={<CurrentComment />} />
           </Routes>
         </section>
-      </CommentsProvider>
+       </CommentsProvider>
+      </Provider>
     </Router>
   );
 };

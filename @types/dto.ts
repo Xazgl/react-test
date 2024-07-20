@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { NavigateFunction } from "react-router";
+import { SetURLSearchParams,  } from "react-router-dom";
 
 export type CommentsContextType = {
   comments: any[];
@@ -8,13 +8,16 @@ export type CommentsContextType = {
   setTotal: React.Dispatch<React.SetStateAction<number>>;
   viewMode: string;
   setViewMode: React.Dispatch<React.SetStateAction<string>>;
-  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   filter: string;
-  handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
-  navigate: NavigateFunction;
-  page: number;
+  page:number;
+  loading:boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setSearchParams:SetURLSearchParams; 
 };
+
 
 export type CommentsProviderProps = {
   children: ReactNode;
 };
+
+
