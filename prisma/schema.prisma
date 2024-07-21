@@ -11,8 +11,8 @@ datasource db {
 }
 
 model Comments {
-  id                String   @id @default(cuid()) @unique
-  id_comment        String  
+  id                String   @id @default(cuid()) 
+  id_comment        String   @unique
   post_id           String 
   name              String 
   email             String?

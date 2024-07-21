@@ -1,6 +1,6 @@
-import {useEffect} from "react";
+import {useEffect, useMemo, useRef} from "react";
 import axios from "axios";
-import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,CircularProgress} from "@mui/material";
+import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper} from "@mui/material";
 import JSONPretty from "react-json-pretty";
 import "react-json-pretty/themes/monikai.css";
 import { SelectTable } from "./SelectTable";
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCommentsFailure, fetchCommentsStart, fetchCommentsSuccess } from "../slice/commentsSlice";
 import { RootState } from "../store";
 import { host } from "../config";
+import { LoadingTable } from "./LoadingTable";
 
 
 export function CommentsTable () {
@@ -20,18 +21,22 @@ export function CommentsTable () {
   const page = usePage()
   const filter = useFilter()
   const debouncedFilter = useDeb(filter);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  
 
   useEffect(() => {
     const fetchComments = async () => {
       dispatch(fetchCommentsStart()); 
+
       try {
         const response = await axios.get(`${host}/commentsAll`, {
-          params: { page, limit: 10, filter },
+          params: { page, limit: 10, debouncedFilter },
         });
-        dispatch(fetchCommentsSuccess({ comments: response.data.comments, total: response.data.total }));
+        setTimeout(()=>{
+         dispatch(fetchCommentsSuccess({ comments: response.data.comments, total: response.data.total }));
+        }, 200 )
       } catch (error) {
         dispatch(fetchCommentsFailure('Ошибка при получении данных'));
       }
@@ -42,31 +47,8 @@ export function CommentsTable () {
 
   const { comments, loading } = useSelector((state: RootState) => state.comments);
 
-  // useEffect(() => {
-  //   const fetchComments = async () => {
-  //     try {
-  //       setLoading(true)
-  //       const response = await axios.get("http://localhost:5000/commentsAll", {
-  //         params: { page, limit: 10, filter },
-  //       });
-  //       setComments(response.data.comments);
-  //       setTotal(response.data.total);
-  //        setTimeout(()=>{
-  //         setLoading(false)}
-  //        ,300) 
-        
-  //     } catch (error) {
-  //       console.error("Ошибка при получении данных:", error);
-  //     }
-  //   };
-
-  //   fetchComments();
-  // }, [page, ]);
-
-
 
   return (
-    
     <section className="flex flex-col w-full  h-full p-5 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-indigo-500  to-90% ">
       <SelectTable />
 
@@ -125,9 +107,7 @@ export function CommentsTable () {
             }
 
             {loading ===  true &&
-              <div className="flex w-full h-[100vh] justify-center mt-3">
-                <CircularProgress sx={{display:'flex',color:'white'}}/>
-              </div>
+              <LoadingTable/>
             }
 
           </TableBody>

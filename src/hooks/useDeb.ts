@@ -1,17 +1,56 @@
 import { useState, useEffect } from "react";
 
-const useDeb = (value:string) => {
-    const [valueDeb,setValueDeb] = useState('')
+const useDeb = (value: string) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    const [initialRender, setInitialRender] = useState(true);
+
     useEffect(() => {
-            const time = setTimeout(()=>{
-                setValueDeb(value)
-            },1000)
+        if (initialRender) {
+            setDebouncedValue(value);
+            setInitialRender(false);
+            return;
+        }
 
-            return() => clearTimeout(time)
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, 1000);
 
-    }, [value])   
-    
-    return valueDeb;  
-} 
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, initialRender]);
+
+    return debouncedValue;
+};
 
 export default useDeb;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const useDeb = (value:string) => {
+//     const [valueDeb,setValueDeb] = useState('')
+//     useEffect(() => {
+//             const time = setTimeout(()=>{
+//                 setValueDeb(value)
+//             },1000)
+
+//             return() => clearTimeout(time)
+
+//     }, [value])   
+    
+//     return valueDeb;  
+// } 
+
+// export default useDeb;
+

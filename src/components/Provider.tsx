@@ -12,8 +12,6 @@ const LoadingContext = createContext<boolean>(false);
 const SetSearchParamsContext = createContext<React.Dispatch<React.SetStateAction<any>>>(() => {});
 
 export const CommentsProvider = ({ children }: CommentsProviderProps) => {
-  // const [comments, setComments] = useState<any[]>([]);
-  // const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState("table");
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter") || "";
@@ -21,10 +19,7 @@ export const CommentsProvider = ({ children }: CommentsProviderProps) => {
   const [loading, setLoading] = useState(false);
 
   return (
-    // <CommentsContext.Provider value={comments}>
-    //   <SetCommentsContext.Provider value={setComments}>
-    //     <TotalContext.Provider value={total}>
-    //       <SetTotalContext.Provider value={setTotal}>
+
             <ViewModeContext.Provider value={viewMode}>
               <SetViewModeContext.Provider value={setViewMode}>
                 <FilterContext.Provider value={filter}>
@@ -40,18 +35,10 @@ export const CommentsProvider = ({ children }: CommentsProviderProps) => {
                 </FilterContext.Provider>
               </SetViewModeContext.Provider>
             </ViewModeContext.Provider>
-    //       </SetTotalContext.Provider>
-    //     </TotalContext.Provider>
-    //   </SetCommentsContext.Provider>
-    // </CommentsContext.Provider>
   );
 };
 
 
-// export const useComments = () => useContext(CommentsContext);
-// export const useSetComments = () => useContext(SetCommentsContext);
-// export const useTotal = () => useContext(TotalContext);
-// export const useSetTotal = () => useContext(SetTotalContext);
 export const useViewMode = () => useContext(ViewModeContext);
 export const useSetViewMode = () => useContext(SetViewModeContext);
 export const useFilter = () => useContext(FilterContext);

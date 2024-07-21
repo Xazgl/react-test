@@ -16,6 +16,7 @@ type CommentsState = {
   error: string;
 }
 
+
 //начальные состояния
 const initialState: CommentsState = {
   comments: [],
@@ -24,7 +25,7 @@ const initialState: CommentsState = {
   error: '',
 };
 
-//
+
 const commentsSlice = createSlice({
   name: 'comments',
   initialState,

@@ -28,17 +28,27 @@ app.get('/comments', async (req, res) => {
     const comments = response.data;
 
     for (const comment of comments) {
-      await db.comments.create({
-        data: {
+
+      const findComment = await db.comments.findUnique({
+        where: {
           id_comment: comment.id.toString(),
-          post_id: comment.postId.toString(),
-          name: comment.name,
-          email: comment.email,
-          body: comment.body,
-        },
+        }
       });
+      if (findComment) {
+        console.log('Уже в базе:', comment.id.toString());
+      } else {
+        await db.comments.create({
+          data: {
+            id_comment: comment.id.toString(),
+            post_id: comment.postId.toString(),
+            name: comment.name,
+            email: comment.email,
+            body: comment.body,
+          }
+        });
+      }
     }
-   res.json('Данные успешно сохранены');
+    res.json('Данные успешно сохранены');
   } catch (error) {
     res.status(500).json({ error: `Ошибка при получении данных ${error}` });
   }
@@ -46,25 +56,25 @@ app.get('/comments', async (req, res) => {
 
 app.get('/commentsAll', async (req, res) => {
   try {
-    const { page = 1, limit = 10, filter = '' } = req.query;
-    
+    const { page = 1, limit = 10, debouncedFilter = '' } = req.query;
+
     const comments = await db.comments.findMany({
       skip: (page - 1) * limit,
       take: +limit,
       where: {
         OR: [
-          { name: { contains: filter, mode: 'insensitive' } },
-          { email: { contains: filter, mode: 'insensitive' } },
-          { body: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: debouncedFilter, mode: 'insensitive' } },
+          { email: { contains: debouncedFilter, mode: 'insensitive' } },
+          { body: { contains: debouncedFilter, mode: 'insensitive' } },
         ],
       },
     });
     const total = await db.comments.count({
       where: {
         OR: [
-          { name: { contains: filter, mode: 'insensitive' } },
-          { email: { contains: filter, mode: 'insensitive' } },
-          { body: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: debouncedFilter, mode: 'insensitive' } },
+          { email: { contains: debouncedFilter, mode: 'insensitive' } },
+          { body: { contains: debouncedFilter, mode: 'insensitive' } },
         ],
       },
     });
